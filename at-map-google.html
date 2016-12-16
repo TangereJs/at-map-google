@@ -1,0 +1,239 @@
+<link rel="import" href="../tangere/tangere.html">
+<link rel="import" href="../google-map/google-map.html">
+
+<dom-module id="at-map-google">
+  <template>
+    <style>
+    </style>
+    <google-map
+      apiKey$="{{apiKey}}"
+      clientId$="{{clientId}}"
+      disableDefaultUi$="{{disableDefaultUi}}"
+      disableMapTypeControl$="{{disableMapTypeControl}}"
+      disableStreetViewControl$="{{disableStreetViewControl}}"
+      disableZoom$="{{disableZoom}}"
+      fitToMarkers$="{{fitToMarkers}}"
+      latitude$="{{latitude}}"
+      longitude$="{{longitude}}"
+      mapType$="{{mapType}}"
+    >
+      <content id="markers" select="google-map-marker"></content>
+    </google-map>
+  </template>
+  <script>
+    'use strict';
+    Polymer({
+      is: 'at-map-google',
+      properties: {
+
+        /**
+         * A Maps API key. To obtain an API key, see https://developers.google.com/maps/documentation/javascript/tutorial#api_key.
+         * @property apiKey
+         * @type String
+         * @default ""
+         */
+        apiKey: {
+          type: String,
+          value: ""
+        },
+
+        /**
+         * Overrides the origin the Maps API is loaded from. Defaults to `https://maps.googleapis.com`.
+         * @property clientId
+         * @type String
+         * @default ""
+         */
+        clientId: {
+          type: String,
+          value: ""
+        },
+
+        /**
+         * If set, removes the map's default UI controls.
+         * @property disableDefaultUi
+         * @type Boolean
+         * @default false
+         */
+        disableDefaultUi: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * If set, removes the map's 'map type' UI controls.
+         * @property disableMapTypeControl
+         * @type Boolean
+         * @default false
+         */
+        disableMapTypeControl: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * If set, removes the map's 'street view' UI controls.
+         * @property disableStreetViewControl
+         * @type Boolean
+         * @default false
+         */
+        disableStreetViewControl: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * If true, prevent the user from zooming the map interactively.
+         * @property disableZoom
+         * @type Boolean
+         * @default false
+         */
+        disableZoom: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * If set, the zoom level is set such that all markers (google-map-marker children) are brought into view.
+         * @property fitToMarkers
+         * @type Boolean
+         * @default false
+         */
+        fitToMarkers: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * A latitude to center the map on.
+         */
+        latitude: {
+          type: Number,
+          value: 37.77493,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * A longitude to center the map on.
+         */
+        longitude: {
+          type: Number,
+          value: -122.41942,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * Map type to display. One of 'roadmap', 'satellite', 'hybrid', 'terrain'.
+         * @property mapType
+         * @type String
+         * @default 'roadmap'
+         */
+        mapType: {
+          type: String,
+          value: 'roadmap',
+          notify: true,
+          xtype: 'enum',
+          xvaluelist: [{
+            title: 'roadmap',
+            value: 'roadmap'
+          },{
+            title: 'satellite',
+            value: 'satellite'
+          },{
+            title: 'hybrid',
+            value: 'hybrid'
+          },{
+            title: 'terrain',
+            value: 'terrain'
+          }]
+        },
+
+        /**
+         * The markers on the map.
+         */
+        markers: {
+          type: Array,
+          value: function() { return []; },
+          observer: '_markersChanged',
+          schema: {
+            items: {
+              properties: {
+                animation: {
+                  type: String,
+                  value: null
+                },
+                icon: {
+                  type: String,
+                  value: null
+                },
+                longitude: {
+                  type: Number,
+                  value: null
+                },
+                latitude: {
+                  type: Number,
+                  value: null
+                },
+                title: {
+                  type: String,
+                  value: ""
+                }
+              }
+            }
+          }
+        }
+
+      },
+      ready: function () {
+
+      },
+      _markersChanged: function (newValue, oldValue) {
+        function isString(obj) {
+          return Object.prototype.toString.call(obj) === "[object String]";
+        }
+        function isArray(obj) {
+          return Object.prototype.toString.call(obj) === "[object Array]";
+        }
+
+        var localValue = newValue;
+
+        if (isString(localValue)) {
+          try {
+            localValue = JSON.parse(localValue);
+          } catch (e) {}
+        }
+
+        var markersContainer = this.$.markers;
+        if (localValue === null) {
+          Polymer.dom(markersContainer).innerHTML = "";
+        }
+
+        if (!isArray(localValue)) {
+          console.log('Value for markers is not array');
+          return;
+        }
+
+        if (!localValue.length) {
+          Polymer.dom(markersContainer).innerHTML = "";
+        }
+
+        localValue.forEach(function (item, index) {
+          var marker = document.createElement('google-map-marker');
+          Polymer.dom(marker).setAttribute('animation', item.animation);
+          Polymer.dom(marker).setAttribute('icon', item.icon);
+          Polymer.dom(marker).setAttribute('latitude', item.latitude);
+          Polymer.dom(marker).setAttribute('longitude', item.longitude);
+          Polymer.dom(marker).setAttribute('title', item.title);
+
+          Polymer.dom(markersContainer).appendChild(marker);
+          // TODO maybe its possible to create document fragment
+          // add all markers to document fragment
+          // and then add fragment to markersContainer
+          // this would be an optimisation which would trigger only one event in google-map instead of many
+        });
+
+      }
+    });
+  </script>
+</dom-module>
