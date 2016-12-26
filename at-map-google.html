@@ -4,21 +4,34 @@
 <dom-module id="at-map-google">
   <template>
     <style>
+      google-map {
+        min-height: 600px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
     </style>
-    <google-map
-      apiKey$="{{apiKey}}"
-      clientId$="{{clientId}}"
-      disableDefaultUi$="{{disableDefaultUi}}"
-      disableMapTypeControl$="{{disableMapTypeControl}}"
-      disableStreetViewControl$="{{disableStreetViewControl}}"
-      disableZoom$="{{disableZoom}}"
-      fitToMarkers$="{{fitToMarkers}}"
-      latitude$="{{latitude}}"
-      longitude$="{{longitude}}"
-      mapType$="{{mapType}}"
-    >
-      <content id="markers" select="google-map-marker"></content>
-    </google-map>
+      <!--
+        template is=dom-if is not used here on purpose
+        for uknown reasons using dom-ifs here breaks the element in playground
+      -->
+      <div id="apiKeyMissing">ApiKey key not set</div>
+      <google-map
+        class="hidden"
+        id="googleMap"
+        client-id$="{{clientId}}"
+        disable-default-ui$="{{disableDefaultUi}}"
+        disable-map-type-control$="{{disableMapTypeControl}}"
+        disable-street-view-control$="{{disableStreetViewControl}}"
+        disable-zoom$="{{disableZoom}}"
+        fit-to-markers$="{{fitToMarkers}}"
+        latitude$={{latitude}}
+        longitude$={{longitude}}
+        map-type$="{{mapType}}"
+        >
+          <content id="markers" select="google-map-marker"></content>
+      </google-map>
   </template>
   <script>
     'use strict';
@@ -156,6 +169,7 @@
           type: Array,
           value: function() { return []; },
           observer: '_markersChanged',
+          xgridcols: "12",
           schema: {
             items: {
               properties: {
@@ -182,11 +196,35 @@
               }
             }
           }
+        },
+
+        hide: {
+          type: Boolean,
+          value: false,
+          observer: '_hideChanged'
         }
 
       },
-      ready: function () {
 
+      observers: [
+        '_apiKeyLoaded(apiKey, clientId)'
+      ],
+
+      _apiKeyLoaded: function(apiKey) {
+        if (!apiKey) { return; }
+        this.$.googleMap.apiKey = apiKey;
+        this.toggleClass('hidden', false, this.$.googleMap);
+        this.toggleClass('hidden', true, this.$.apiKeyMissing);
+        this.$.googleMap.resize();
+      },
+
+      _hideChanged: function (newValue, oldValue) {
+        if (!this.apiKey) { return; }
+        var self = this;
+        self.$.googleMap.resize();
+      },
+
+      ready: function () {
       },
       _markersChanged: function (newValue, oldValue) {
         function isString(obj) {
@@ -218,22 +256,37 @@
           Polymer.dom(markersContainer).innerHTML = "";
         }
 
-        localValue.forEach(function (item, index) {
-          var marker = document.createElement('google-map-marker');
-          Polymer.dom(marker).setAttribute('animation', item.animation);
-          Polymer.dom(marker).setAttribute('icon', item.icon);
-          Polymer.dom(marker).setAttribute('latitude', item.latitude);
-          Polymer.dom(marker).setAttribute('longitude', item.longitude);
-          Polymer.dom(marker).setAttribute('title', item.title);
+        var self = this;
 
-          Polymer.dom(markersContainer).appendChild(marker);
-          // TODO maybe its possible to create document fragment
-          // add all markers to document fragment
-          // and then add fragment to markersContainer
-          // this would be an optimisation which would trigger only one event in google-map instead of many
+        if (!self._markers) {
+          self._markers = [];
+        }
+
+        self._markers.forEach(function (marker, index) {
+          marker.map = null;
         });
 
-      }
+        self._markers = [];
+
+        localValue.forEach(function (item, index) {
+          var map = self.$.googleMap.map;
+          var api = self.$.googleMap.$.api.api;
+
+          var latLng = new api.LatLng(item.latitude, item.longitude);
+
+          var marker = new api.Marker({
+            animation: item.animation || api.Animation.DROP,
+            icon: '',
+            position: latLng,
+            title: item.title,
+            map: map
+          });
+
+          self._markers.push(marker);
+        });
+
+      },
+
     });
   </script>
 </dom-module>
