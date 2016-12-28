@@ -225,6 +225,10 @@
       },
 
       ready: function () {
+        var self = this;
+        this.$.googleMap.addEventListener('google-map-ready', function(event) {
+          self._markersChanged(self.markers);
+        });
       },
       _markersChanged: function (newValue, oldValue) {
         function isString(obj) {
@@ -233,6 +237,8 @@
         function isArray(obj) {
           return Object.prototype.toString.call(obj) === "[object Array]";
         }
+
+        if (!this.apiKey) { return; }
 
         var localValue = newValue;
 
@@ -263,7 +269,7 @@
         }
 
         self._markers.forEach(function (marker, index) {
-          marker.map = null;
+          marker.setMap(null);
         });
 
         self._markers = [];
