@@ -12,6 +12,7 @@
         display: none !important;
       }
     </style>
+    <div id="container">
       <!--
         template is=dom-if is not used here on purpose
         for uknown reasons using dom-ifs here breaks the element in playground
@@ -32,6 +33,7 @@
         >
           <content id="markers" select="google-map-marker"></content>
       </google-map>
+    </div>
   </template>
   <script>
     'use strict';
@@ -215,13 +217,16 @@
         this.$.googleMap.apiKey = apiKey;
         this.toggleClass('hidden', false, this.$.googleMap);
         this.toggleClass('hidden', true, this.$.apiKeyMissing);
-        this.$.googleMap.resize();
       },
 
       _hideChanged: function (newValue, oldValue) {
         if (!this.apiKey) { return; }
         var self = this;
-        self.$.googleMap.resize();
+
+        this.toggleClass('hidden', newValue, this.$.container);
+        if (!newValue) {
+          self.$.googleMap.resize();
+        }
       },
 
       ready: function () {
