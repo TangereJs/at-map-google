@@ -4,15 +4,17 @@
 <dom-module id="at-map-google">
   <template>
     <style>
-      google-map {
-        min-height: 600px;
+      .google-map-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
       }
 
       .hidden {
         display: none !important;
       }
     </style>
-    <div id="container">
+    <div id="container" class="google-map-container">
       <!--
         template is=dom-if is not used here on purpose
         for uknown reasons using dom-ifs here breaks the element in playground
