@@ -234,6 +234,7 @@
       ready: function () {
         var self = this;
         this.$.googleMap.addEventListener('google-map-ready', function(event) {
+          self._isReady = true;
           self._markersChanged(self.markers);
         });
       },
@@ -245,7 +246,7 @@
           return Object.prototype.toString.call(obj) === "[object Array]";
         }
 
-        if (!this.apiKey) { return; }
+        if (!this.apiKey || !this._isReady) { return; }
 
         var localValue = newValue;
 

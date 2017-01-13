@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "tangere": "TangereJs/tangere#0.8-preview",
-    "google-map": "GoogleWebComponents/google-map",
+    "google-map": "GoogleWebComponents/google-map#master",
     "google-apis": "TangereJs/google-apis#master"
   }
 }

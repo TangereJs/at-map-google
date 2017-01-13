@@ -8,11 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="at-map-google.html">
   <link rel="import" href="../paper-styles/demo-pages.html">
   <link rel="import" href="../at-doc-snippet/at-doc-snippet.html">
   <link rel="import" href="../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
-  <link rel="import" href="at-map-google.html">
 
   <style is="custom-style" include="demo-pages-shared-styles">
     at-doc-snippet {
@@ -28,6 +28,8 @@
     }
 
     .container > div {
+      width: 100px;
+      position: relative;
       padding: 15px;
       margin: 5px;
       background-color: white;
@@ -37,12 +39,23 @@
     .vertical-section-container {
       max-width: 900px
     }
+
+    .map-container {
+      position: relative;
+      max-width: 500px;
+      height: 1000px;
+    }
   </style>
 
 
 </head>
 
 <body unresolved class="fullbleed">
+
+  <div class="map-container">
+    <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg">Google</at-map-google>
+  </div>
+
   <div class="vertical-section-container centered">
 
 
@@ -52,7 +65,7 @@
       <template>
         <div class="container layout-horizontal">
           <div>
-            <at-map-google href="http://www.google.com">Google</at-map-google>
+            <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg">Google</at-map-google>
           </div>
         </div>
       </template>
@@ -65,7 +78,7 @@
       <template>
         <div class="container layout-horizontal">
           <div>
-            <at-map-google href="http://www.google.com">Search with <span class="color-action">Google</span></at-map-google>
+            <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg">Search with <span class="color-action">Google</span></at-map-google>
           </div>
         </div>
       </template>
@@ -77,7 +90,7 @@
       <template>
         <div class="container layout-horizontal">
           <div>
-            <at-map-google href="http://www.google.com"><at-carbon-icon icon="now:search" class="color-action"></at-carbon-icon>Search with Google</at-map-google>
+            <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg"><at-carbon-icon icon="now:search" class="color-action"></at-carbon-icon>Search with Google</at-map-google>
           </div>
         </div>
       </template>

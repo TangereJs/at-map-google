@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <title>at-map-google demo2</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="at-map-google.html">
+
+  <style>
+    .map-container {
+      position: relative;
+      max-width: 1000px;
+      height: 600px;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div class="map-container">
+    <at-map-google
+      id="map"
+      href="http://www.google.com"
+      api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg"
+    ></at-map-google>
+  </div>
+
+  <script>
+    document.addEventListener('WebComponentsReady', function(event) {
+      var map = document.getElementById('map');
+
+      var marker = {
+        latitude: "",
+        longitude: "",
+        title: "",
+        icon: "",
+        animation: 1 // this is a number; possible values are 1 - BOUNCE, 2 - DROP, 3 - Uo, 4 - So
+      }
+
+      var markers = [{
+        latitude: "37.77493",
+        longitude: "-122.41942",
+        title: "Title 1",
+        icon: "",
+        animation: 1
+      },{
+        latitude: "36.77493",
+        longitude: "-122.41942",
+        title: "Title 2",
+        icon: "",
+        animation: 2
+      },{
+        latitude: "37.77493",
+        longitude: "-121.41942",
+        title: "Title 3",
+        icon: "",
+        animation: 3
+      },{
+        latitude: "36.77493",
+        longitude: "-121.41942",
+        title: "Title 4",
+        icon: "",
+        animation: 4
+      }];
+
+      map.markers = markers;
+      map.fitToMarkers = true;
+    });
+  </script>
+
+</body>
+
+</html>
