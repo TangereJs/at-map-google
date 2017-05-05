@@ -4,10 +4,21 @@
 <dom-module id="at-map-google">
   <template>
     <style>
+      :host {
+        display: block;        
+        box-sizing: border-box;
+      }
+
       .google-map-container {
         position: relative;
         width: 100%;
         height: 100%;
+        /*
+          Ensure that the div element for the map has a height. By default, div elements are created with a height of 0, and are therefore invisible. (source https://developers.google.com/maps/documentation/javascript/tutorial#Troubleshooting)
+          *ij* providing min-height for .google-map-container gives initial height for it
+          this is important since it, transitively, provides visible div for google-map to #map div so that map can be rendered
+        */
+        min-height: 500px;
       }
 
       .hidden {
@@ -216,9 +227,9 @@
 
       _apiKeyLoaded: function(apiKey) {
         if (!apiKey) { return; }
-        this.$.googleMap.apiKey = apiKey;
         this.toggleClass('hidden', false, this.$.googleMap);
         this.toggleClass('hidden', true, this.$.apiKeyMissing);
+        this.$.googleMap.apiKey = apiKey;
       },
 
       _hideChanged: function (newValue, oldValue) {
