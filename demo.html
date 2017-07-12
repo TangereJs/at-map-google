@@ -39,12 +39,6 @@
     .vertical-section-container {
       max-width: 900px
     }
-
-    .map-container {
-      position: relative;
-      max-width: 500px;
-      height: 1000px;
-    }
   </style>
 
 
@@ -52,51 +46,17 @@
 
 <body unresolved class="fullbleed">
 
-  <div class="map-container">
-    <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg">Google</at-map-google>
-  </div>
-
   <div class="vertical-section-container centered">
 
-
-    <h4>at-map-google provides app links like &lt;a href='...'&gt;&lt;/a&gt;</h4>
-
     <at-doc-snippet>
       <template>
-        <div class="container layout-horizontal">
+        <div class="container">
           <div>
-            <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg">Google</at-map-google>
+            <at-map-google api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg"></at-map-google>
           </div>
         </div>
       </template>
     </at-doc-snippet>
-
-
-    <h4>Primiary action should have class='color-action' assigned</h4>
-
-    <at-doc-snippet>
-      <template>
-        <div class="container layout-horizontal">
-          <div>
-            <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg">Search with <span class="color-action">Google</span></at-map-google>
-          </div>
-        </div>
-      </template>
-    </at-doc-snippet>
-
-        <h4>Primiary action should have class='color-action' assigned</h4>
-
-    <at-doc-snippet>
-      <template>
-        <div class="container layout-horizontal">
-          <div>
-            <at-map-google href="http://www.google.com" api-key="AIzaSyBlWaSgpV3HG2zl9ZuDhp3yXcMZFgUKyAg"><at-carbon-icon icon="now:search" class="color-action"></at-carbon-icon>Search with Google</at-map-google>
-          </div>
-        </div>
-      </template>
-    </at-doc-snippet>
-
-
 
   </div>
 
